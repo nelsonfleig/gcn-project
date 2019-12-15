@@ -1,0 +1,8 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/env
+/.vscode
+/__pycache__
+adj_orig.npy
+pred_matrix.npy

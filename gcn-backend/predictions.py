@@ -73,4 +73,3 @@ def get_names_from_mbids(prediction_mbids):
     
   return names
 
-print(get_predictions_for(mbid))

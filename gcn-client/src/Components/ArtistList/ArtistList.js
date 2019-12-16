@@ -7,7 +7,7 @@ const ArtistList = (props) => {
         return (
             <div className="ArtistList">
                 {props.artists.map(artist =>
-                    <Artist artist={artist} key={artist.id} />
+                    <Artist artist={artist} key={artist.mbid} />
                 )}
             </div>
         )

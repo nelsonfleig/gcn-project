@@ -14,13 +14,10 @@ def get_edge_pairs(tx):
 with driver.session() as session:
   session.read_transaction(get_edge_pairs)
 
-
-
 g = nx.Graph()
 g.add_edges_from(edges)
 nodes_sorted = sorted(list(g.nodes()))
 
-#adj = nx.to_numpy_matrix(g, nodelist=order)
 adj = nx.adjacency_matrix(g, nodelist=nodes_sorted) # needed because mask_test_edges requires a rank 1 matrix
 
 print("{} nodes and {} edges loaded successfully from Neo4J to Networkx".format(g.number_of_nodes(), g.number_of_edges()))

@@ -6,10 +6,9 @@ const Flask = {
             if (jsonResponse) {
               return jsonResponse.map(artist => {
                 return {
-                    id: artist.id,
-                    ArtistName: artist.ArtistName,
-                    Country: artist.Country
-    
+                    mbid: artist.mbid,
+                    name: artist.name,
+                    country: artist.country
                 }
               })
             } else {

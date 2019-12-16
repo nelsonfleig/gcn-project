@@ -1,11 +1,10 @@
 # Import all the libraries we need
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from load_data import adj
+from load_data import adj, nodes_sorted
 from utils import mask_test_edges, preprocess_graph, sparse_to_tuple
 
 import tensorflow as tf
-from scipy.special import expit
 from scipy.special import expit
 import numpy as np
 from sklearn import preprocessing
@@ -50,7 +49,7 @@ num_nodes = adj.shape[0]
 # Simple GCN: no node features (featureless). Substitute the identity matrix for the feature matrix: X = I
 # The sparse_to_tuple method 'unpacks' the sparse diagonal matrix into a tuple of node coordinates, values and shape
 #
-features = sparse_to_tuple(sp.identity(num_nodes))
+features = sparse_to_tuple(sp.identity(num_nodes)) # dim: Anzahl Knoten * Anzahl Features
 
 # The features[2] dereferences the shape object in the features tuple. features[2][1] dereferences the number of unique nodes that can be neighbors of
 # any node in the graph. Since we are using an identity matrix, the num_features is equal to the number of nodes in the graph.

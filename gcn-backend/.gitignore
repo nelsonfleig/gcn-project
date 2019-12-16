@@ -6,3 +6,4 @@
 /__pycache__
 adj_orig.npy
 pred_matrix.npy
+nodes_sorted.npy

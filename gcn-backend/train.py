@@ -3,7 +3,7 @@ from gcn_model import *
 import tensorflow as tf
 import time
 
-# Calculates Average Precision
+# Calculates Average Precision and Area Under Curve
 def get_roc_score(edges_pos, edges_neg):
     # Since we are using the embeddings in a test scenario, recalculate them with no dropout. 
     feed_dict.update({placeholders['dropout']: 0})
@@ -30,10 +30,6 @@ def get_roc_score(edges_pos, edges_neg):
     return roc_score, ap_score
 
 
-
-NUM_EPOCHS=1
-DROPOUT=0.1
-
 def construct_feed_dict(adj_normalized, adj, features, placeholders):
     # construct feed dictionary
     feed_dict = dict()
@@ -55,13 +51,13 @@ placeholders = {
 # Create model
 model = GCNModelAE(placeholders, num_features, features_nonzero)
 
-
+# TODO: Paper Link....
 pos_weight = float(adj.shape[0] * adj.shape[0] - adj.sum()) / adj.sum()
 norm = adj.shape[0] * adj.shape[0] / float((adj.shape[0] * adj.shape[0] - adj.sum()) * 2)
 
 # Optimizer
 with tf.name_scope('optimizer'):
-    opt = OptimizerAE(preds=model.reconstructions, # Tensor reshaped to (n, -1) 
+    opt = OptimizerAE(preds=model.reconstructions, # Tensor reshaped to vector form (n, -1) 
                       labels=tf.reshape(tf.compat.v1.sparse_tensor_to_dense(placeholders['adj_orig'],
                                                                   validate_indices=False), [-1]),
                       pos_weight=pos_weight,
@@ -77,10 +73,18 @@ sess.run(tf.compat.v1.global_variables_initializer())
 # Construct feed dictionary
 feed_dict = construct_feed_dict(adj_norm, adj_label, features, placeholders)
 
+
+
+
+# Train model
+
+NUM_EPOCHS=1
+DROPOUT=0.1
+
 cost_val = []
 ap_val = []
 auc_score_val = []
-# Train model
+
 print("Epochs: ")
 for epoch in range(NUM_EPOCHS):
     t = time.time()
@@ -103,26 +107,31 @@ for epoch in range(NUM_EPOCHS):
     #      "val_roc=", "{:.5f}".format(roc_curr[-1]),
     #      "val_ap=", "{:.5f}".format(ap_curr),
     #      "time=", "{:.5f}".format(time.time() - t))
-    if epoch % 40 == 0:
-      print("")
+    #if epoch % 40 == 0:
+      #print("")
     print(epoch, end =" ")
 
 print('\nOptimization Finished!')
-
-# Display graphs of how the model performed
-from scipy.ndimage.filters import gaussian_filter1d
-
 print("Final loss: ", cost_val[-1])
 
-reco = sess.run(model.reconstructions, feed_dict=feed_dict)
+# Test the model
+roc_score, ap_score = get_roc_score(test_edges, test_edges_false)
+print('Test AUC score: {:.5f}'.format(roc_score))
+print('Test AP score: {:.5f}'.format(ap_score))
 
+reco = sess.run(model.reconstructions, feed_dict=feed_dict)
 pred_matrix = expit(reco).reshape((adj.shape[0], -1))
 
+# Save the required numpy matrices to disk to be used directly to make predictions
+nodes_sorted_name = 'nodes_sorted.npy'
 adj_file_name = 'adj_orig.npy'
 prediction_filename = 'pred_matrix.npy'
 
-np.save(adj_file_name, adj.todense()) # We use todense() because the original adj was transformed to a CSR matrix
+nodes_sorted = np.array(nodes_sorted) # Transform list to numpy array for saving
+np.save(nodes_sorted_name, nodes_sorted)
+np.save(adj_file_name, adj.todense()) # We use todense() because the original adj was transformed to a CSR matrix (sparse matrix)
 np.save(prediction_filename, pred_matrix)
 
+print("Sorted nodes list saved as: {}".format(nodes_sorted_name))
 print("Adjacency matrix saved as: {}".format(adj_file_name))
 print("Prediction matrix saved as: {}".format(prediction_filename))

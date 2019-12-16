@@ -11,7 +11,7 @@ const Artist = (props) => {
     return (
         <div className="Artist">
             <div className="Artist-information">
-                <p>{props.artist.ArtistName} | {props.artist.Country}</p>
+                <p>{props.artist.name} | {props.artist.country}</p>
             </div>
             {renderAction()}
         </div>

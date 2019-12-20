@@ -56,3 +56,19 @@ def get_artist_and_preds(mbid):
         session.read_transaction(queryData)
 
     return artist
+
+def search_artists(name):
+    artists = []
+    cypher_query = 'MATCH (a:Artist) WHERE a.name =~ ".*(?i){}.*" RETURN a.mbid, a.name, a.country LIMIT 30'.format(name)
+
+    def queryData(tx):
+        for record in tx.run(cypher_query):
+            artist = {"mbid": record['a.mbid'],
+                      "name": record['a.name'],
+                      "country": record['a.country']}
+            artists.append(artist)
+
+    with driver.session() as session:
+        session.read_transaction(queryData)
+
+    return artists

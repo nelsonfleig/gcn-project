@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
-import ArtistList from './Components/ArtistList/ArtistList';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import Header from './Components/Header';
+import ArtistList from './Components/ArtistList';
+import ArtistPage from './Components/ArtistPage';
 import './App.css';
 import Flask from './util/Flask';
+
+import Test from './Components/Test';
 
 class App extends Component {
 
@@ -10,8 +14,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      artists: []
+      artists: [],
+      searchResults: [],
+      selectedArtist: null
     }
+
+    this.selectArtist = this.selectArtist.bind(this)
+
   }
 
   componentDidMount(){
@@ -26,18 +35,34 @@ class App extends Component {
     });
   }
 
+  selectArtist(artistId) {
+    Flask.getArtistById(artistId)
+    .then(artist => {
+      this.setState({
+        selectedArtist: artist
+      })
+    })
+  }
+
   render() {
-    return (
-      <div className="App">
-        <Navbar dark color="primary">
-          <div className="container">
-            <NavbarBrand href="/">GCN App</NavbarBrand>
-          </div>
-        </Navbar>
-        <ArtistList artists={this.state.artists}></ArtistList>
-      </div>
-    );
+
+    //<Route path="/artists/:mbid" component={() => <ArtistPage selectArtist={this.selectArtist} /> } />
+
+    return ( 
+      <BrowserRouter>
+        <div className="App">
+          <Header />
+          <Switch>
+            <Route path="/artists/:mbid" component={ArtistPage} />
+            <Route exact path="/" component={() => <ArtistList artists={this.state.artists} selectArtist={this.selectArtist} />} />
+            <Redirect to="/" />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    )
+      
   }
 }
+
 
 export default App;

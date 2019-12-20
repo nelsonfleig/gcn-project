@@ -9,7 +9,7 @@ const Artist = (props) => {
     }
 
     return (
-        <div className="Artist">
+        <div className="Artist" onClick={() => props.selectArtist(props.artist.mbid)}>
             <div className="Artist-information">
                 <p>{props.artist.name} | {props.artist.country}</p>
             </div>

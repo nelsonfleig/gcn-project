@@ -2,7 +2,7 @@
 
 ## GCN-Backend
 
-This project requires Python3 and virtualenvironment to run. It creates a virtual environment in which to install the necessary dependencies. To install it run the following in the gcn-backend folder:
+This project requires Python3 and virtualenvironment to run. It creates a virtual environment in which to install the necessary dependencies. Furthermore, a Neo4J instance should be running and configured to allow remote requests. To install this application run the following in the gcn-backend folder:
 
 pip install virtualenv
 
@@ -10,11 +10,11 @@ Then create a virtual environment by running the following command:
 
 python -m venv env
 
-Then activate the virtual environment by executing: 
+Next activate the virtual environment by executing: 
 
 env/Scripts/activate
 
-Then, on the gcn-project folder, run the following to install the required dependencies:
+Then, on the gcn-project/gcn-backend folder, run the following to install the required dependencies:
 
 pip install -r requirements.txt
 

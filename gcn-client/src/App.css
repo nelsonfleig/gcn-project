@@ -7,6 +7,10 @@
   pointer-events: none;
 }
 
+.navbar {
+  background-color: #cca353;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -42,39 +46,14 @@
   flex-direction: column;
   justify-content: center;
   /* background-image: url('./background_search_desktop.jpg'); */
+  background-image: url('https://i.pinimg.com/originals/58/a2/d9/58a2d9f02e1b3e7baba4b0216d7bb7e9.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
   height: 25rem;
+  margin-bottom: 20px;
 }
 
-.SearchBar-sort-options ul {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2.22rem;
-  color: #ffffff;
-}
-
-.SearchBar-sort-options li {
-  cursor: pointer;
-  width: 4.33rem;
-  border-bottom: 1px solid #fff;
-  padding: 0 2.58rem .33rem 2.58rem;
-  line-height: 1.13;
-  text-align: center;
-  font-weight: 600;
-  font-size: .83rem;
-  transition: color .25s;
-}
-
-.SearchBar-sort-options li:hover {
-  color: #d4cfcf;
-}
-
-.SearchBar-sort-options li.active,
-.SearchBar-sort-options li.active:hover {
-  border-bottom: 1px solid #f0c36c;
-  color: #f0c36c;
-}
 
 .SearchBar-fields {
   display: flex;
@@ -100,13 +79,14 @@
   text-align: center;
 }
 
-.SearchBar-submit a {
+.SearchBar-submit button {
   border-radius: 4px;
   padding: .72rem 1.7rem;
   background-color: #cca353;
   color: #ffffff;
   font-weight: 600;
   transition: background-color .5s;
+  margin: 0 10px;
 }
 
 .SearchBar-submit a:hover {
@@ -114,9 +94,36 @@
   background-color: #a7874b;
 }
 
+.ArtistList a {
+  text-decoration: none;
+  color: #000;
+}
+
+.ArtistList a:hover {
+  font-weight: 600;
+}
+
+.ArtistListTitle {
+  margin-bottom: 30px;
+}
+
+.ArtistPage-Wrapper {
+  margin-top: 50px;
+}
+
+.ArtistPageTitle {
+  margin-bottom: 30px;
+}
+
+.SearchBar-fields input{
+  border: 1px solid #000;
+  width: 30%;
+}
+
 @media only screen and (max-width: 560px) {
   .SearchBar {
-    /* background-image: url('./background_search_mobile.jpg'); */
+    background-image: url('https://i.pinimg.com/originals/58/a2/d9/58a2d9f02e1b3e7baba4b0216d7bb7e9.jpg');
+    background-position: center;
   }
 
   .SearchBar-sort-options ul {

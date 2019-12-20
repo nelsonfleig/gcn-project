@@ -25,13 +25,13 @@ def get_names_from_mbids(prediction_mbids):
 def get_all_artists():
 
     artists = []
-    cypher_query = 'MATCH (a:Artist) RETURN a.mbid, a.name, a.country LIMIT 30'
+    cypher_query = 'MATCH (a1:Artist)-[r:PLAYED_WITH]-(a2:Artist) RETURN a1.mbid, a1.name, a1.country, count(r) ORDER BY count(r) DESC LIMIT 50'
 
     def queryData(tx):
         for record in tx.run(cypher_query):
-            artist = {"mbid": record['a.mbid'],
-                      "name": record['a.name'],
-                      "country": record['a.country']}
+            artist = {"mbid": record['a1.mbid'],
+                      "name": record['a1.name'],
+                      "country": record['a1.country']}
             artists.append(artist)
 
     with driver.session() as session:
@@ -59,7 +59,7 @@ def get_artist_and_preds(mbid):
 
 def search_artists(name):
     artists = []
-    cypher_query = 'MATCH (a:Artist) WHERE a.name =~ ".*(?i){}.*" RETURN a.mbid, a.name, a.country LIMIT 30'.format(name)
+    cypher_query = 'MATCH (a:Artist) WHERE a.name =~ ".*(?i){}.*" RETURN a.mbid, a.name, a.country LIMIT 200'.format(name)
 
     def queryData(tx):
         for record in tx.run(cypher_query):

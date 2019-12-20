@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand } from 'reactstrap';
 
 const Header = (props) => {
     return (
-        <Navbar dark color="primary">
+        <Navbar dark>
             <div className="container">
               <NavbarBrand href="/">GCN App</NavbarBrand>
             </div>

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { useParams } from 'react-router-dom';
 import Flask from '../util/Flask';
 
 class ArtistPage extends Component {
@@ -14,40 +13,42 @@ class ArtistPage extends Component {
     }
 
     componentDidMount() {
-        //this.loadArtistInfo();
-        let {mbid} = useParams();
+       this.loadArtistInfo();
+    }
+
+    loadArtistInfo() {
+        let {mbid} = this.props.match.params
         Flask.getArtistById(mbid).then(artist => {
             this.setState({
                 artist: artist
             })
         })
-    }
-
-    loadArtistInfo() {
-        //const mbid = "f8365a1d-6b16-43fc-a8b6-3de0f64a0409"
-        // let {mbid} = useParams();
-        // Flask.getArtistById(mbid).then(artist => {
-        //     this.setState({
-        //         artist: artist
-        //     })
-        // })
         
     }
 
 
     render() {
-        
-        // const predictions = this.state.artist.predictions.map(prediction => {
-        //     return (<p>{prediction}</p>)
-        // })
 
+        const artist = this.state.artist;
 
-        //console.log(this.state.artist)
-
-        if (this.state.artist != null) {
-            return (<div>{this.state.artist.name}</div>)
+        if (artist != null) {
+            let count = 0;
+            const predictions = artist.predictions.map(prediction => {
+                    count++;
+                    return (<p key={count}>{prediction}</p>)
+                })
+            
+            return (
+                <div>
+                    <div className="ArtistPage-Wrapper">
+            <h1 className="ArtistPageTitle">{artist.name} | {artist.country}</h1>
+                        <h4 >Top {artist.predictions.length} Collaboration Predictions</h4>
+                        {predictions}
+                    </div>
+                </div>
+            )
         } else {
-            return <div>No artist</div>
+            return <div></div>
         }
     }
 }

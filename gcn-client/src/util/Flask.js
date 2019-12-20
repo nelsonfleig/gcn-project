@@ -30,8 +30,8 @@ const Flask = {
       })
   },
 
-  search: (name) => {
-    return fetch('http://127.0.0.1:5000/artists/search' + name)
+  search: (term) => {
+    return fetch('http://127.0.0.1:5000/artists/search/' + term)
       .then(response => response.json())
       .then(jsonResponse => {
         if (jsonResponse) {

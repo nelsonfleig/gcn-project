@@ -6,8 +6,6 @@ import ArtistPage from './Components/ArtistPage';
 import './App.css';
 import Flask from './util/Flask';
 
-import Test from './Components/Test';
-
 class App extends Component {
 
   constructor(props) {
@@ -20,7 +18,8 @@ class App extends Component {
     }
 
     this.selectArtist = this.selectArtist.bind(this)
-
+    this.searchArtists = this.searchArtists.bind(this)
+    this.clearSearch = this.clearSearch.bind(this)
   }
 
   componentDidMount(){
@@ -44,9 +43,21 @@ class App extends Component {
     })
   }
 
-  render() {
+  searchArtists(term) {
+    Flask.search(term).then( artists => {
+      this.setState({
+        searchResults: artists
+      })
+    })
+  }
 
-    //<Route path="/artists/:mbid" component={() => <ArtistPage selectArtist={this.selectArtist} /> } />
+  clearSearch() {
+    this.setState({
+      searchResults: []
+    })
+  }
+
+  render() {
 
     return ( 
       <BrowserRouter>
@@ -54,7 +65,7 @@ class App extends Component {
           <Header />
           <Switch>
             <Route path="/artists/:mbid" component={ArtistPage} />
-            <Route exact path="/" component={() => <ArtistList artists={this.state.artists} selectArtist={this.selectArtist} />} />
+            <Route exact path="/" component={() => <ArtistList artists={this.state.artists} selectArtist={this.selectArtist} searchArtists={this.searchArtists} searchResults={this.state.searchResults} clearSearch={this.clearSearch} />} />
             <Redirect to="/" />
           </Switch>
         </div>

@@ -78,7 +78,10 @@ feed_dict = construct_feed_dict(adj_norm, adj_label, features, placeholders)
 
 # Train model
 
-NUM_EPOCHS=1
+# Define Epochs - Use a number between 150-250 for good results. It is a good idea to 
+# plot the cost_val variable to see at which epochs the cost improvement plateaus
+
+NUM_EPOCHS=15
 DROPOUT=0.1
 
 cost_val = []

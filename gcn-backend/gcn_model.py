@@ -22,6 +22,7 @@ import time
 
 print("TensorFlow version: ", tf.__version__)
 
+# The following function creates a test adj matrix in order calculate the model accuracy (see train.py)
 adj_train, train_edges, val_edges, val_edges_false, test_edges, test_edges_false = mask_test_edges(adj)
 print("Loaded",adj.shape[0],"nodes")
 print("Loaded",adj.sum(),"edges")
@@ -34,10 +35,10 @@ print("val_edges_false:               ", len(val_edges_false), "\t\t",type(val_e
 print("test_edges:                    ", test_edges.shape,"\t",       type(test_edges))
 print("test_edges_false:              ", len(test_edges_false),"\t\t",type(test_edges_false))
 
-# The preprocess_graph method implements the renormalization 'trick'. See above for details.
+# The preprocess_graph method implements graph normalization (see Kipf)
 adj_norm = preprocess_graph(adj)
 
-# Since the adj_train matrix was not created with diagonal entires, add them now.
+# Since the adj_train matrix was not created with with self loops, we add them now.
 adj_label = adj_train + sp.eye(adj_train.shape[0])
 
 # Use sparse_to_tuple to 'unpack' the COO object into edges, normalized adjacency values and normalized adjacency shape
@@ -49,7 +50,7 @@ num_nodes = adj.shape[0]
 # Simple GCN: no node features (featureless). Substitute the identity matrix for the feature matrix: X = I
 # The sparse_to_tuple method 'unpacks' the sparse diagonal matrix into a tuple of node coordinates, values and shape
 #
-features = sparse_to_tuple(sp.identity(num_nodes)) # dim: Anzahl Knoten * Anzahl Features
+features = sparse_to_tuple(sp.identity(num_nodes)) # dim: # of Nodes * # of Features
 
 # The features[2] dereferences the shape object in the features tuple. features[2][1] dereferences the number of unique nodes that can be neighbors of
 # any node in the graph. Since we are using an identity matrix, the num_features is equal to the number of nodes in the graph.
@@ -128,7 +129,8 @@ class GraphConvolution():
     def set_weights(self, weights):
         self.vars['weights'] = weights
 
-# explain this in its own section and how it works. have text and diagram
+# Multiplies the graph embeddings by its own transpose to create the reconstruction matrix (before applying the sigmoid function).
+# Output is a flattened vector: (# Nodes^2, 1)
 class InnerProductDecoder():
     """Decoder model layer for link prediction."""
     def __init__(self, input_dim, dropout=0., act=tf.nn.sigmoid, **kwargs):
